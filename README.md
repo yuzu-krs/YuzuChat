@@ -56,10 +56,3 @@
 
 個人・学術用途での使用は自由です。商用利用・再配布は開発者へお問い合わせください。
 
----
-
-## 👤 開発者
-
-**YuzuChat 開発チーム**
-GitHub: [your-name-or-org]
-お問い合わせ: [your-email-or-discord]
