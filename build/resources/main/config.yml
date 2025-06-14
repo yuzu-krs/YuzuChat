@@ -1,0 +1,3 @@
+# config.yml
+chat-color: "light_green"       # 変換後の日本語に使う色
+roman-color: "gray"             # 括弧内の元ローマ字に使う色
