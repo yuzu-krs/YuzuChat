@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id("xyz.jpenilla.run-paper") version "2.3.1"
+    id 'com.github.johnrengelman.shadow' version '7.1.2'  // 例: Shadow plugin
+
 }
 
 group = 'org.example.yuzuchat'
@@ -20,6 +22,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.5-R0.1-SNAPSHOT")
+    implementation 'org.json:json:20230227'
 }
 
 tasks {
@@ -57,9 +60,8 @@ processResources {
         expand props
     }
 }
-
-jar {
+shadowJar {
     archiveBaseName.set('YuzuChat')
-    archiveVersion.set('1.0')
     archiveClassifier.set('')
+    mergeServiceFiles()  // サービスファイルの統合などがあれば
 }

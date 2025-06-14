@@ -1,4 +1,4 @@
 name: YuzuChat
-version: '1.0-SNAPSHOT'
-main: org.example.yuzuchat.yuzuChat.YuzuChat
-api-version: '1.21'
+version: 1.0-SNAPSHOT
+main: org.example.yuzuchat.yuzu.Yuzu
+api-version: 1.21
