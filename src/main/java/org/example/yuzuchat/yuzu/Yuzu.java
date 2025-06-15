@@ -3,11 +3,15 @@ package org.example.yuzuchat.yuzu;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.example.yuzuchat.yuzu.GoogleIME;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * メインプラグインクラス。
@@ -55,26 +59,34 @@ public final class Yuzu extends JavaPlugin implements Listener {
         getLogger().info("Converted: " + converted);
 
         if (converted != null && !converted.isEmpty()) {
-            event.setCancelled(true);
+            // 標準チャットの視覚的な表示を抑制したいので、Recipients から全員削除
+            Set<Player> recipients = new HashSet<>(event.getRecipients());
+            event.getRecipients().clear(); // 表示されなくなるが、イベント自体はキャンセルしない！
 
+            // プレイヤー名を白で表示
             Component playerName = Component.text(event.getPlayer().getName() + ": ", NamedTextColor.WHITE);
 
+            // 設定ファイルから色を取得
             String chatColorName = getConfig().getString("chat-color", "light_green").toUpperCase();
             String romanColorName = getConfig().getString("roman-color", "gray").toUpperCase();
 
             NamedTextColor chatColor = NamedTextColor.NAMES.value(chatColorName.toLowerCase());
             NamedTextColor romanColor = NamedTextColor.NAMES.value(romanColorName.toLowerCase());
 
-            // 無効な色名だった場合にフォールバックする
+            // 無効な色名のフォールバック
             if (chatColor == null) chatColor = NamedTextColor.GREEN;
             if (romanColor == null) romanColor = NamedTextColor.GRAY;
 
-
+            // メッセージ構築：「こんにちは (konnichiwa)」
             Component message = Component.text(converted + " ", chatColor)
                     .append(Component.text("(" + original + ")", romanColor));
 
             Component finalMessage = playerName.append(message);
-            event.getPlayer().getServer().getOnlinePlayers().forEach(p -> p.sendMessage(finalMessage));
+
+            // 自作チャット表示（受信対象だったプレイヤー全員に送信）
+            recipients.forEach(p -> p.sendMessage(finalMessage));
         }
     }
+
 }
+
